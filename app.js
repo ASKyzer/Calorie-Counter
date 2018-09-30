@@ -90,7 +90,28 @@ const UICtrl = (function() {
         calories: document.querySelector(UISelectors.itemCalories).value
       }
     },
-
+    addListItem: function(item){
+      // Create li element
+      const li = document.createElement('li');
+      // add class
+      li.className = 'collection-item';
+      // Add ID
+      li.id = `item-${item.id}`;
+      // Add html
+      li.innerHTML = `
+        <strong>${item.name}: </strong> <em>${item.calories}</em>
+        <a href="#" class="secondary-content">
+          <i class="edit-item fa fa-pencil"></i>
+        </a>
+      `;
+      // Insert item
+      document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend', li);
+    },
+    // Clear input fields
+    clearInput: function(){
+      document.querySelector(UISelectors.itemName).value = '';
+      document.querySelector(UISelectors.itemCalories).value = '';
+    },
     // get UISelectors
     getSelectors: function(){
       return UISelectors;
@@ -119,6 +140,12 @@ const App = (function(ItemCtrl, UICtrl, StorageCtrl) {
     if (input.name !== '' && input.calories !== '') {
       // Add item
       const newItem = ItemCtrl.addItem(input.name, input.calories)
+
+      // Add item to UI list
+      UICtrl.addListItem(newItem);
+
+      // Clear input
+      UICtrl.clearInput();
       
     }
     e.preventDefault();
