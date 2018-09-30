@@ -29,7 +29,25 @@ const ItemCtrl = (function() {
     getItems: function() {
       return data.items;
     },
+    addItem: function(name, calories) {
+      let ID;
+      // create ID
+      if (data.items.length > 0) {
+        ID = data.items[data.items.length - 1].id +1;
+      } else {
+        ID = 0;
+      }   
+      
+      // Calories to number
+      calories = parseInt(calories);
 
+      // Create new item
+      newItem = new Item(ID, name, calories);
+      // Add to items array
+      data.items.push(newItem);
+
+      return newItem;
+    },
     logData: function() {
       return data;
     }
@@ -43,7 +61,8 @@ const UICtrl = (function() {
   const UISelectors = {
     itemList: '#item-list',
     addBtn: '.add-btn',
-    itemName: '#item-name'
+    itemName: '#item-name',
+    itemCalories: '#item-calories'
   }
 
   // Public Methods 
@@ -63,6 +82,13 @@ const UICtrl = (function() {
       })
       // Insert list to UI
       document.querySelector(UISelectors.itemList).innerHTML = html;
+    },
+    // Get item input
+    getItemInput: function(){
+      return {
+        name: document.querySelector(UISelectors.itemName).value,
+        calories: document.querySelector(UISelectors.itemCalories).value
+      }
     },
 
     // get UISelectors
@@ -86,11 +112,17 @@ const App = (function(ItemCtrl, UICtrl, StorageCtrl) {
 
   // Add item submit
   const itemAddSubmit = function(e){
-    console.log('Add');
-    
+    // Get form input from UI Controller
+    const input = UICtrl.getItemInput();
+
+    // Make sure the name and calories are entered
+    if (input.name !== '' && input.calories !== '') {
+      // Add item
+      const newItem = ItemCtrl.addItem(input.name, input.calories)
+      
+    }
     e.preventDefault();
-    const name = document.querySelector(UISelectors.itemName)
-    console.log(name)
+
   }
 
 
